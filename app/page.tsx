@@ -1,7 +1,22 @@
-export default function Home() {
+/* eslint-disable @next/next/no-img-element */
+import PostCard from '@/components/PostCard';
+import { createClient } from '@/utils/supabase/server';
+
+export default async function Home() {
+  const supabase = await createClient();
+  const { data: posts } = await supabase.from('posts').select();
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      soolog에 오신걸 환영합니다. 업데이트가 되나요?.
-    </div>
+    <section className="mx-auto mt-4 ">
+      <ul className="grid gap-4 grid-cols-5 ">
+        {posts?.map((post) => (
+          <li
+            key={post.id}
+            className="transition-shadow  duration-[250ms] ease-in hover:shadow-lg hover:scale-105 shadow-custom rounded-lg"
+          >
+            <PostCard {...post} />
+          </li>
+        ))}
+      </ul>
+    </section>
   );
 }
